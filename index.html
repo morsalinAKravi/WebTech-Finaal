@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Air Quality Index</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px 0;
+    }
+    /* .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .circle {
+      width: 70px;
+      height: 70px;
+      background-color: #0088ff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: white;
+    } */
+    .header {
+      background-color: #1976d2;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      margin: 10px;
+    }
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+    .box1 {
+      background-color: #a5d6a7;
+      height: 650px;
+      overflow-y: auto;
+    }
+    .box2 {
+      background-color: #ffe082;
+      height: 240px;
+    }
+    .box3 {
+      background-color: #388eeb;
+      color: white;
+      font-weight: bold;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 300px;
+    }
+    form label {
+      margin-top: 8px;
+      font-size: 14px;
+      text-align: left;
+      width: 100%;
+    }
+    .form-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+      width: 100%;
+    }
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="password"],
+    form input[type="date"],
+    form select,
+    form input[type="color"] {
+      width: 100%;
+      padding: 6px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .gender-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+      width: 100%;
+    }
+    form input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    form button {
+      margin-top: 12px;
+      padding: 8px 12px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    form button:hover {
+      background-color: #125aa3;
+    }
+    .color-picker-label {
+      margin-top: 12px;
+      font-size: 14px;
+      text-align: left;
+      width: 100%;
+    }
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      background-color: white;
+      color: black;
+    }
+    table th, table td {
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+    table thead {
+      background-color: #1976d2;
+      color: white;
+    }
+    .login-error {
+      color: red;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+    .login-success {
+      color: green;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+    .password-container {
+      position: relative;
+      width: 100%;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 12px;
+      color: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <div class="circle"><b>AQI</b></div>
+    </div>
+    <div class="header">AIR QUALITY INDEX</div>
+
+    <div class="grid">
+      <div class="left-column">
+        <div class="box box1">
+          <form onsubmit="return validateForm()" action="process.php" method="post">
+            <div class="form-title">REGISTRATION FORM</div>
+
+            <label for="fullName">Name:</label>
+            <input type="text" id="fullName" name="name" required>
+            <span class="error" id="nameError"></span>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <span class="error" id="emailError"></span>
+
+            <label>Gender:</label>
+            <div class="gender-options">
+              <label><input type="radio" name="gender" value="male" id="genderMale"> Male</label>
+              <label><input type="radio" name="gender" value="female" id="genderFemale"> Female</label>
+              <label><input type="radio" name="gender" value="other" id="genderOther"> Other</label>
+            </div>
+            <span class="error" id="genderError"></span>
+
+            <label for="location">Location:</label>
+            <select id="location" name="location" required>
+              <option value="">Select a location</option>
+              <option value="Dhaka">Dhaka</option>
+              <option value="Chattogram">Chattogram</option>
+              <option value="Sylhet">Sylhet</option>
+              <option value="Rangpur">Rangpur</option>
+              <option value="Rajshahi">Rajshahi</option>
+              <option value="Barishal">Barishal</option>
+            </select>
+
+            <label for="dob">Select Date:</label>
+            <input type="date" id="dob" name="date" required>
+            <span class="error" id="dobError"></span>
+
+            <label for="password">Password:</label>
+            <div class="password-container">
+              <input type="password" id="password" name="password" required>
+              <span class="toggle-password" onclick="togglePassword('password')">Show</span>
+            </div>
+            <span class="error" id="passwordError"></span>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <div class="password-container">
+              <input type="password" id="confirmPassword" name="confirm-password" required>
+              <span class="toggle-password" onclick="togglePassword('confirmPassword')">Show</span>
+            </div>
+            <span class="error" id="pass2Error"></span>
+
+            <label><input type="checkbox" id="termsCheckbox"> I agree to the Terms and Conditions</label>
+            <span class="error" id="termsError"></span>
+
+            <button type="submit">Register</button>
+
+            <label for="bgColorPicker" class="color-picker-label">Pick Page Background:</label>
+            <input type="color" id="bgColorPicker" name="bgColorPicker" value="#f5f5f5">
+          </form>
+        </div>
+
+        <div class="box box2">
+          <!-- Updated Login Form: action points to login.php -->
+          <form id="loginForm" action="login.php" method="post" onsubmit="return validateLoginSubmit()">
+            <div class="form-title">LOGIN</div>
+
+            <label for="login-email">Email:</label>
+            <input type="email" id="login-email" name="email" required>
+            <span class="login-error" id="login-email-error"></span>
+
+            <label for="login-password">Password:</label>
+            <div class="password-container">
+              <input type="password" id="login-password" name="password" required>
+              <span class="toggle-password" onclick="togglePassword('login-password')">Show</span>
+            </div>
+            <span class="login-error" id="login-password-error"></span>
+            <span class="login-success" id="login-success"></span>
+
+            <label><input type="checkbox" id="rememberMe" name="rememberMe"> Remember me</label>
+
+            <button type="submit">Login</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="box box3">
+        <div style="width: 100%;">
+          <div class="form-title">Weather AQI</div>
+          <table>
+            <thead>
+              <tr><th>City</th><th>AQI</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Dhaka</td><td>165</td></tr>
+              <tr><td>Chattogram</td><td>120</td></tr>
+              <tr><td>Sylhet</td><td>95</td></tr>
+              <tr><td>Rangpur</td><td>165</td></tr>
+              <tr><td>Rajshahi</td><td>120</td></tr>
+              <tr><td>Barishal</td><td>95</td></tr>
+              <tr><td>New York, USA</td><td>75</td></tr>
+              <tr><td>London, UK</td><td>85</td></tr>
+              <tr><td>Tokyo, Japan</td><td>90</td></tr>
+              <tr><td>Delhi, India</td><td>210</td></tr>
+              <tr><td>Beijing, China</td><td>230</td></tr>
+              <tr><td>Sydney, Australia</td><td>60</td></tr>
+              <tr><td>Paris, France</td><td>80</td></tr>
+              <tr><td>Dubai, UAE</td><td>130</td></tr>
+              <tr><td>Moscow, Russia</td><td>105</td></tr>
+              <tr><td>Rio de Janeiro, Brazil</td><td>110</td></tr>
+              <tr><td>Toronto, Canada</td><td>70</td></tr>
+              <tr><td>Berlin, Germany</td><td>75</td></tr>
+              <tr><td>Seoul, South Korea</td><td>100</td></tr>
+              <tr><td>Mexico City, Mexico</td><td>155</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check for background color on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // First check URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlColor = urlParams.get('bgColor');
+      
+      // Then check cookies
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+      }
+      const cookieColor = getCookie('bgColor');
+      
+      // Apply the color (priority to URL parameter)
+      const bgColor = urlColor || cookieColor;
+      if (bgColor) {
+        document.body.style.backgroundColor = bgColor;
+        document.getElementById('bgColorPicker').value = bgColor;
+      }
+
+      // Check for remember me email
+      const rememberEmail = getCookie('rememberEmail');
+      if (rememberEmail) {
+        document.getElementById('login-email').value = rememberEmail;
+        document.getElementById('rememberMe').checked = true;
+      }
+
+      // Registration form color picker storage
+      document.getElementById('bgColorPicker').addEventListener('input', e => {
+        const color = e.target.value;
+        document.body.style.backgroundColor = color;
+        document.cookie = `bgColor=${encodeURIComponent(color)}; path=/; max-age=31536000`;
+      });
+    });
+
+    // Toggle password visibility
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      const toggle = field.nextElementSibling;
+      if (field.type === 'password') {
+        field.type = 'text';
+        toggle.textContent = 'Hide';
+      } else {
+        field.type = 'password';
+        toggle.textContent = 'Show';
+      }
+    }
+  
+    // Registration form validation
+    function validateForm() {
+      let name = document.getElementById("fullName").value.trim();
+      let email = document.getElementById("email").value.trim();
+      let password = document.getElementById("password").value;
+      let confirmPassword = document.getElementById("confirmPassword").value;
+      let dobValue = document.getElementById("dob").value;
+      let genderChecked = document.querySelector('input[name="gender"]:checked');
+      let termsCheckbox = document.getElementById("termsCheckbox");
+
+      let nameError = document.getElementById("nameError");
+      let emailError = document.getElementById("emailError");
+      let passwordError = document.getElementById("passwordError");
+      let pass2Error = document.getElementById("pass2Error");
+      let dobError = document.getElementById("dobError");
+      let genderError = document.getElementById("genderError");
+      let termsError = document.getElementById("termsError");
+
+      // Reset all errors
+      nameError.textContent = "";
+      emailError.textContent = "";
+      passwordError.textContent = "";
+      pass2Error.textContent = "";
+      dobError.textContent = "";
+      genderError.textContent = "";
+      termsError.textContent = "";
+
+      let valid = true;
+
+      if (name === "") {
+        nameError.textContent = "Full Name is required.";
+        valid = false;
+      } else {
+        let namePattern = /^[a-zA-Z.\-\s]+$/;
+        if (!namePattern.test(name)) {
+          nameError.textContent = "Invalid name: use letters, hyphen (-), dot (.), and spaces only.";
+          valid = false;
+        }
+      }
+
+      if (email === "") {
+        emailError.textContent = "Email ID is required.";
+        valid = false;
+      } else {
+        let emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo)\.com$/i;
+        if (!emailPattern.test(email)) {
+          emailError.textContent = "Email must be a gmail.com, hotmail.com, or yahoo.com address.";
+          valid = false;
+        }
+      }
+
+      if (!genderChecked) {
+        genderError.textContent = "Please select a gender.";
+        valid = false;
+      }
+
+      if (password === "") {
+        passwordError.textContent = "Password is required.";
+        valid = false;
+      } else {
+        let strengthPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!strengthPattern.test(password)) {
+          passwordError.textContent = "Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.";
+          valid = false;
+        }
+      }
+
+      if (confirmPassword === "") {
+        pass2Error.textContent = "Please confirm your password.";
+        valid = false;
+      } else if (password !== confirmPassword) {
+        pass2Error.textContent = "Passwords do not match.";
+        valid = false;
+      }
+
+      if (dobValue === "") {
+        dobError.textContent = "Please select your date of birth.";
+        valid = false;
+      } else {
+        let dobDate = new Date(dobValue);
+        let today = new Date();
+        let age = today.getFullYear() - dobDate.getFullYear();
+        let m = today.getMonth() - dobDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dobDate.getDate())) {
+          age--;
+        }
+      }
+
+      if (!termsCheckbox.checked) {
+        termsError.textContent = "You must agree to the terms and conditions.";
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    // Login form client-side validation; on success, submit to login.php
+    function validateLoginSubmit() {
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+      const rememberMe = document.getElementById("rememberMe").checked;
+      const emailError = document.getElementById("login-email-error");
+      const passwordError = document.getElementById("login-password-error");
+      const successMsg = document.getElementById("login-success");
+
+      // Reset errors
+      emailError.textContent = "";
+      passwordError.textContent = "";
+      emailError.style.display = "none";
+      passwordError.style.display = "none";
+      successMsg.style.display = "none";
+
+      let valid = true;
+
+      if (email === "") {
+        emailError.textContent = "Email is required.";
+        emailError.style.display = "block";
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailError.textContent = "Invalid email format.";
+        emailError.style.display = "block";
+        valid = false;
+      }
+
+      if (password === "") {
+        passwordError.textContent = "Password is required.";
+        passwordError.style.display = "block";
+        valid = false;
+      }
+
+      if (!valid) {
+        return false; // Prevent form submission
+      }
+
+      // Store “remember me” email in a cookie (optional on client side)
+      if (rememberMe) {
+        document.cookie = `rememberEmail=${encodeURIComponent(email)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+      } else {
+        document.cookie = "rememberEmail=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+
+      // If validation passes, allow the form to submit to login.php
+      return true;
+    }
+
+    // Replace the existing login form submission with AJAX
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+    const rememberMe = document.getElementById("rememberMe").checked;
+
+    // Reset errors
+    document.getElementById("login-email-error").style.display = "none";
+    document.getElementById("login-password-error").style.display = "none";
+    document.getElementById("login-success").style.display = "none";
+
+    try {
+        const response = await fetch("login.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ email, password, rememberMe })
+        });
+        
+        const result = await response.json();
+
+        if (result.success) {
+            // Login success: redirect
+            window.location.href = result.redirect;
+        } else {
+            // Show error in the login form
+            const errorElement = document.getElementById("login-password-error");
+            errorElement.textContent = result.error;
+            errorElement.style.display = "block";
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+        const errorElement = document.getElementById("login-password-error");
+        errorElement.textContent = "An error occurred. Try again.";
+        errorElement.style.display = "block";
+    }
+});
+  </script>
+</body>
+</html>
